@@ -19,7 +19,13 @@ class Player(pygame.sprite.Sprite):
         self.left_sprites = { 0: (0, 64, 64, 64), 1: (64, 64, 64, 64), 2: (128, 64, 64, 64), 3:(192, 64, 64, 64), 4:(256, 64, 64, 64), 5:(320, 64, 64, 64), 6:(384, 64, 64, 64), 7:(448, 64, 64, 64), 8:(512, 64, 64, 64) }
         self.down_sprites = { 0: (0, 128, 64, 64), 1: (64, 128, 64, 64), 2: (128, 128, 64, 64), 3:(192, 128, 64, 64), 4:(256, 128, 64, 64), 5:(320, 128, 64, 64), 6:(384, 128, 64, 64), 7:(448, 128, 64, 64), 8:(512, 128, 64, 64)}
         self.right_sprites = { 0: (0, 192, 64, 64), 1: (64, 192, 64, 64), 2: (128, 192, 64, 64), 3:(192, 192, 64, 64), 4:(256, 192, 64, 64), 5:(320, 192, 64, 64), 6:(384, 192, 64, 64), 7:(448, 192, 64, 64), 8:(512, 192, 64, 64) }
-
+        """ Aquí se seleccionan los sprites con cada una de las direcciones a
+        las que el jugador puede atacar """
+        self.atk_up_sprites = { 0: (0, 256, 64, 64), 1: (64, 256, 64, 64), 2: (128, 256, 64, 64), 3: (192, 256, 64, 64), 4:(256, 256, 64, 64), 5: (320, 256, 64, 64)}
+        self.atk_left_sprites = { 0: (0, 320, 64, 64), 1: (64, 320, 64, 64), 2: (128, 320, 64, 64), 3:(192, 320, 64, 64), 4:(256, 320, 64, 64), 5:(320, 320, 64, 64)}
+        self.atk_down_sprites = { 0: (0, 384, 64, 64), 1: (64, 384, 64, 64), 2: (128, 384, 64, 64), 3:(192, 384, 64, 64), 4:(256, 384, 64, 64), 5:(320, 384, 64, 64)}
+        self.atk_right_sprites = { 0: (0, 448, 64, 64), 1: (64, 448, 64, 64), 2: (128, 448, 64, 64), 3:(192, 448, 64, 64), 4:(256, 448, 64, 64), 5:(320, 448, 64, 64)}
+    
     def get_frame(self, frame_set):
         """Selecciona el cuadro en la animación del personaje"""
         self.frame += 1
@@ -40,17 +46,21 @@ class Player(pygame.sprite.Sprite):
         """Actualiza los sprites en función de la direccion hacia la cual se
         dirige el personaje"""
         if direction == 'left':
-            self.clip(self.left_sprites)
-            self.rect.x -= self.speed
+            if self.rect.x >= -30: #Direccion para cambio de mapa
+                self.clip(self.left_sprites)
+                self.rect.x -= self.speed
         if direction == 'right':
-            self.clip(self.right_sprites)
-            self.rect.x += self.speed
+            if self.rect.x <= 757: #Direccion para cambio de mapa
+                self.clip(self.right_sprites)
+                self.rect.x += self.speed
         if direction == 'up':
-            self.clip(self.up_sprites)
-            self.rect.y -= self.speed
+            if self.rect.y >= -30: #Direccion para cambio de mapa
+                self.clip(self.up_sprites)
+                self.rect.y -= self.speed
         if direction == 'down':
-            self.clip(self.down_sprites)
-            self.rect.y += self.speed
+            if self.rect.y <= 540: #Direccion para cambio de mapa
+                self.clip(self.down_sprites)
+                self.rect.y += self.speed
 
         if direction == 'stand_left':
             self.clip(self.left_sprites[0])
@@ -60,6 +70,19 @@ class Player(pygame.sprite.Sprite):
             self.clip(self.up_sprites[0])
         if direction == 'stand_down':
             self.clip(self.down_sprites[0])
+
+        self.image = self.sheet.subsurface(self.sheet.get_clip())
+
+    def atk_update(self,attack):
+        """-----------------------------------------------------------------"""
+        if attack == 'left_atk':
+            self.clip(self.atk_left_sprites)
+        if attack == 'right_atk':
+            self.clip(self.atk_right_sprites)
+        if attack == 'up_atk':
+            self.clip(self.atk_up_sprites)
+        if attack == 'down_atk':
+            self.clip(self.atk_down_sprites)
 
         self.image = self.sheet.subsurface(self.sheet.get_clip())
 
@@ -94,3 +117,17 @@ class Player(pygame.sprite.Sprite):
                 self.update('stand_up')
             if event.key == pygame.K_s:
                 self.update('stand_down')
+
+
+        if event.type == pygame.KEYDOWN:
+            """Evalua si se presionan las teclas de ataque, de ser así, el
+            personaje atacará hacia la dirección indicada """
+            if event.key == pygame.K_LEFT:
+                self.atk_update('left_atk')
+                Movement = False
+            if event.key == pygame.K_RIGHT:
+                self.atk_update('right_atk')
+            if event.key == pygame.K_UP:
+                self.atk_update('up_atk')
+            if event.key == pygame.K_DOWN:
+                self.atk_update('down_atk')
