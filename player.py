@@ -25,7 +25,7 @@ class Player(pygame.sprite.Sprite):
         self.atk_left_sprites = { 0: (0, 320, 64, 64), 1: (64, 320, 64, 64), 2: (128, 320, 64, 64), 3:(192, 320, 64, 64), 4:(256, 320, 64, 64), 5:(320, 320, 64, 64)}
         self.atk_down_sprites = { 0: (0, 384, 64, 64), 1: (64, 384, 64, 64), 2: (128, 384, 64, 64), 3:(192, 384, 64, 64), 4:(256, 384, 64, 64), 5:(320, 384, 64, 64)}
         self.atk_right_sprites = { 0: (0, 448, 64, 64), 1: (64, 448, 64, 64), 2: (128, 448, 64, 64), 3:(192, 448, 64, 64), 4:(256, 448, 64, 64), 5:(320, 448, 64, 64)}
-    
+
     def get_frame(self, frame_set):
         """Selecciona el cuadro en la animación del personaje"""
         self.frame += 1
@@ -46,19 +46,19 @@ class Player(pygame.sprite.Sprite):
         """Actualiza los sprites en función de la direccion hacia la cual se
         dirige el personaje"""
         if direction == 'left':
-            if self.rect.x >= -30: #Direccion para cambio de mapa
+            if self.rect.x >= 102: #Direccion para cambio de mapa
                 self.clip(self.left_sprites)
                 self.rect.x -= self.speed
         if direction == 'right':
-            if self.rect.x <= 757: #Direccion para cambio de mapa
+            if self.rect.x <= 628: #Direccion para cambio de mapa
                 self.clip(self.right_sprites)
                 self.rect.x += self.speed
         if direction == 'up':
-            if self.rect.y >= -30: #Direccion para cambio de mapa
+            if self.rect.y >= 55: #Direccion para cambio de mapa
                 self.clip(self.up_sprites)
                 self.rect.y -= self.speed
         if direction == 'down':
-            if self.rect.y <= 540: #Direccion para cambio de mapa
+            if self.rect.y <= 232: #Direccion para cambio de mapa
                 self.clip(self.down_sprites)
                 self.rect.y += self.speed
 
